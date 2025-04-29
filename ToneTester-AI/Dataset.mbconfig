@@ -1,0 +1,115 @@
+﻿{
+  "TrainingTime": 30,
+  "Scenario": "Classification",
+  "DataSource": {
+    "Type": "TabularFile",
+    "Version": 1,
+    "FilePath": "C:\\Users\\t1239901_s\\Desktop\\archive\\train.txt",
+    "Delimiter": ";",
+    "DecimalMarker": ".",
+    "HasHeader": false,
+    "ColumnProperties": [
+      {
+        "ColumnName": "col0",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "String",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      },
+      {
+        "ColumnName": "col1",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "String",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 1
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 1,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "SdcaMaximumEntropyMulti",
+        "Score": 0.34811264230077893,
+        "RuntimeInSeconds": 2.3210000991821289
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "FastForestOva",
+        "Score": 0.65608148591971238,
+        "RuntimeInSeconds": 15.192000389099121
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "LbfgsLogisticRegressionOva",
+        "Score": 0.85260635110844818,
+        "RuntimeInSeconds": 8.72599983215332
+      },
+      {
+        "Version": 0,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.54463750748951467,
+        "RuntimeInSeconds": 3.6319999694824219
+      }
+    ],
+    "Pipeline": {
+      "parameter": {
+        "0": {
+          "InputColumnName": "col0",
+          "OutputColumnName": "col0"
+        },
+        "1": {
+          "InputColumnNames": [
+            "col0"
+          ],
+          "OutputColumnName": "Features"
+        },
+        "2": {
+          "OutputColumnName": "col1",
+          "InputColumnName": "col1"
+        },
+        "3": {
+          "OutputColumnNames": [
+            "Features"
+          ],
+          "InputColumnNames": [
+            "Features"
+          ]
+        },
+        "4": {
+          "L1Regularization": 1.0,
+          "L2Regularization": 1.0,
+          "LabelColumnName": "col1",
+          "FeatureColumnName": "Features"
+        },
+        "5": {
+          "OutputColumnName": "PredictedLabel",
+          "InputColumnName": "PredictedLabel"
+        }
+      },
+      "estimators": [
+        "FeaturizeText",
+        "Concatenate",
+        "MapValueToKey",
+        "NormalizeMinMax",
+        "LbfgsLogisticRegressionOva",
+        "MapKeyToValue"
+      ]
+    },
+    "MetricName": "MicroAccuracy"
+  },
+  "Type": "TrainingConfig",
+  "Version": 2
+}

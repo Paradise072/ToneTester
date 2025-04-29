@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>ToneTester_AI</RootNamespace>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Dataset.mbconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ML" Version="4.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Dataset.mbconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Dataset.consumption.cs">
+      <DependentUpon>Dataset.mbconfig</DependentUpon>
+    </Compile>
+    <Compile Update="Dataset.training.cs">
+      <DependentUpon>Dataset.mbconfig</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+</Project>
