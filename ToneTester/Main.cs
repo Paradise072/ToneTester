@@ -30,47 +30,15 @@ namespace ToneTester
         {
             InitializeComponent();
             CenterToScreen(); // Just makes the UI appear in the center of the screen. 
-            pictureBox2.Paint += pictureBox2_Paint;
-            pictureBox2.Resize += pictureBox2_Resize;
-        }
-
-        private void pictureBox2_Resize(object sender, EventArgs pe) // If the screen changes size we have to redraw the pie chart
-        {
-            pictureBox2.Invalidate();
-        }
             
-        private void pictureBox2_Paint(object sender, System.Windows.Forms.PaintEventArgs pe)
-        {
-            Graphics g = pe.Graphics;
-            g.Clear(pictureBox2.BackColor);
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-            Pen p = new Pen(Color.Black, 2);
-
-            Rectangle rec = new Rectangle(0, 0, pictureBox2.Width-2, pictureBox2.Height-2);
-
-            if (evaluated)
-            {
-                float total = 0;
-                foreach (KeyValuePair<string, float> pair in moods)
-                {
-                    float degree = pair.Value * 360; // To get the size of the pie slice
-
-                    Brush b1 = new SolidBrush(moodColors[pair.Key.ToLower()]);
-                    g.FillPie(b1, rec, total, degree);
-                    total += degree;
-                    b1.Dispose();
-                }
-            }
-            p.Dispose();
         }
 
-
-        
         private void Form1_Load(object sender, EventArgs e)
         {
+            this.DoubleBuffered = true; // Fixes visual errors
             pictureBox2.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox2_Paint);
             pictureBox2.Resize += new EventHandler(this.pictureBox2_Resize);
-            this.DoubleBuffered = true;
+            
         }
 
         private void UpdateUI(object sender, EventArgs e)
@@ -107,13 +75,44 @@ namespace ToneTester
             }
         }
 
+        // If the screen changes size, we have to redraw the pie chart
+        private void pictureBox2_Resize(object sender, EventArgs pe) 
+        {
+            pictureBox2.Invalidate();
+        }
+
+        // Pie chart logic
+
+        private void pictureBox2_Paint(object sender, System.Windows.Forms.PaintEventArgs pe)
+        {
+            Graphics g = pe.Graphics;
+            g.Clear(pictureBox2.BackColor);
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias; // There was a weird sharpening effect before
+
+            Rectangle rec = new Rectangle(0, 0, pictureBox2.Width-2, pictureBox2.Height-2);
+
+            if (evaluated)
+            {
+                float total = 0;
+                foreach (KeyValuePair<string, float> pair in moods)
+                {
+                    float degree = pair.Value * 360; // To get the size of the pie slice
+
+                    Brush b1 = new SolidBrush(moodColors[pair.Key.ToLower()]);
+                    g.FillPie(b1, rec, total, degree);
+                    total += degree;
+                    b1.Dispose();
+                }
+            }
+        }
+
         // Quit function
         private void quitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
         }
 
-        // Just an about me menu
+        // Just an "about me" menu
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
